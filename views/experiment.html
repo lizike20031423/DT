@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Improving static websites by eliciting samples from people</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+        }
+
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Sidebar start here  */
+        .sidebar {
+            position: fixed;
+            background-image: url('/img/blackboard.jpeg');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            width: 350px;
+            top: 80px;
+            right: 10px;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            font-size: 20px;
+            text-transform: uppercase;
+            color: #ffffff;
+            padding: 18px;
+            font-weight: bold;
+        }
+
+        .sidebar h4 {
+            color: white;
+        }
+
+        .sidebar label {
+            color: white;
+        }
+
+        .sidebar ul li {
+            margin: 25px 0;
+        }
+
+        .sidebar input {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        .sidebar button {
+            display: block;
+
+
+            margin: 0 auto;
+            margin-top: 10px;
+
+
+
+            border: none;
+            color: #fff;
+            background-image: linear-gradient(30deg, #0400ff, #4ce3f7);
+            border-radius: 20px;
+            background-size: 100% auto;
+            font-family: inherit;
+            font-size: 15px;
+            padding: 0.4em 1.5em;
+        }
+
+        .sidebar button:hover {
+            background-position: right center;
+            background-size: 200% auto;
+            -webkit-animation: pulse 2s infinite;
+            animation: pulse512 1.5s infinite;
+        }
+
+
+
+
+        @keyframes pulse512 {
+            0% {
+                box-shadow: 0 0 0 0 #05bada66;
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgb(218 103 68 / 0%);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgb(218 103 68 / 0%);
+            }
+        }
+
+
+
+
+        .ribbon {
+            background: rgba(200, 200, 200, 0.5);
+            width: 50px;
+            height: 70px;
+            margin: 0 auto;
+            position: relative;
+            top: 8px;
+            border: 1px solid rgba(255, 255, 255, .3);
+            border-top: 2px solid rgba(255, 255, 255, .5);
+            border-bottom: 0;
+            border-radius: 5px 5px 0 0;
+            box-shadow: 0 0 3px rgba(0, 0, 0, .7);
+        }
+
+        .ribbon:before {
+            content: "";
+            display: block;
+            width: 15px;
+            height: 15px;
+            background: #4E535B;
+            border: 4px solid #cfd0d1;
+            margin: 18px auto;
+            box-shadow: inset 0 0 5px #000, 0 0 2px #000, 0 1px 1px 1px #A7A8AB;
+            border-radius: 100%;
+        }
+
+        .login {
+            display: block;
+            width: 70px;
+            height: 4px;
+            background: #4E535B;
+            border-radius: 5px;
+            border-bottom: 1px solid #FFFFFF;
+            border-top: 2px solid #CBCBCD;
+            margin: 0 auto;
+        }
+
+        .clip {
+            position: absolute;
+            top: -65px;
+            left: 140px;
+            z-index: 999;
+        }
+
+        .para {
+            font-size: 16px;
+            font-weight: bold;
+            color: white
+        }
+
+        #minimizeIcon {
+            -webkit-animation: pulse 2s infinite;
+            animation: pulse512 1.5s infinite;
+        }
+
+        #minimizeSlider {
+            -webkit-animation: pulse 2s infinite;
+            animation: pulse512 1.5s infinite;
+        }
+    </style>
+
+    <script type="text/javascript">
+        window.onload = function () {
+            var parameter_count = 0;
+            var chain_index = 0;
+
+            var vector0 = {
+                linewidth: Math.floor(Math.random() * (201) + 800),
+                fontsize: Math.floor(Math.random() * (19) + 12),
+                lineheight: Math.random() * (11),
+                fonthue: Math.floor(Math.random() * (361)),
+                fontsaturation: Math.floor(Math.random() * (101)),
+                fontlightness: Math.floor(Math.random() * (101)),
+                backgroundhue: Math.floor(Math.random() * (361)),
+                backgroundsaturation: Math.floor(Math.random() * (101)),
+                backgroundlightness: Math.floor(Math.random() * (101))
+            }
+            var vector1 = {
+                linewidth: Math.floor(Math.random() * (201) + 800),
+                fontsize: Math.floor(Math.random() * (19) + 12),
+                lineheight: Math.random() * (11),
+                fonthue: Math.floor(Math.random() * (361)),
+                fontsaturation: Math.floor(Math.random() * (101)),
+                fontlightness: Math.floor(Math.random() * (101)),
+                backgroundhue: Math.floor(Math.random() * (361)),
+                backgroundsaturation: Math.floor(Math.random() * (101)),
+                backgroundlightness: Math.floor(Math.random() * (101))
+            }
+            var vector2 = {
+                linewidth: Math.floor(Math.random() * (201) + 800),
+                fontsize: Math.floor(Math.random() * (19) + 12),
+                lineheight: Math.random() * (11),
+                fonthue: Math.floor(Math.random() * (361)),
+                fontsaturation: Math.floor(Math.random() * (101)),
+                fontlightness: Math.floor(Math.random() * (101)),
+                backgroundhue: Math.floor(Math.random() * (361)),
+                backgroundsaturation: Math.floor(Math.random() * (101)),
+                backgroundlightness: Math.floor(Math.random() * (101))
+            }
+
+            var vectorspace = [vector0, vector1, vector2]
+
+            var isSlider = false;
+            var linewidth = document.getElementById("linewidth");
+            var fontsize = document.getElementById("fontsize");
+            var lineheight = document.getElementById("lineheight");
+            var fontHue = document.getElementById("fontHue");
+            var fontSaturation = document.getElementById("fontSaturation");
+            var fontLightness = document.getElementById("fontLightness");
+            var bgHue = document.getElementById("bgHue");
+            var bgSaturation = document.getElementById("bgSaturation");
+            var bgLightness = document.getElementById("bgLightness");
+            var iteration = document.getElementById('iteration');
+            var chain = document.getElementById('chain');
+
+            var parameterarray = [linewidth, fontsize, lineheight, fontHue, fontSaturation, fontLightness, bgHue, bgSaturation, bgLightness]
+
+            linewidth.style.display = "none";
+            fontsize.style.display = "none";
+            lineheight.style.display = "none";
+            fontHue.style.display = "none";
+            fontSaturation.style.display = "none";
+            fontLightness.style.display = "none";
+            bgHue.style.display = "none";
+            bgSaturation.style.display = "none";
+            bgLightness.style.display = "none";
+
+
+            var visitlinewidth = 0;
+            var visitfontsize = 0;
+            var visitlineheight = 0;
+            var visitfonthue = 0;
+            var visitfontsaturation = 0;
+            var visitfontlightness = 0;
+            var visitbackgroundhue = 0;
+            var visitbackgroundsaturation = 0;
+            var visitbackgroundlightness = 0;
+
+
+            var permArr = [], usedChars = [];
+
+            function permute(input) {
+                var i, ch;
+                for (i = 0; i < input.length; i++) {
+                    ch = input.splice(i, 1)[0];
+                    usedChars.push(ch);
+                    if (input.length == 0) {
+                        permArr.push(usedChars.slice());
+                    }
+                    permute(input);
+                    input.splice(i, 0, ch);
+                    usedChars.pop();
+                }
+                return permArr.slice(0, 3);
+            };
+
+            var reorder = permute([0, 5, 6, 7, 8, 1, 2, 3, 4,]);
+          // var reorder = [[0,1,2,3,4,5,6,7,8],[8,7,6,5,4,3,2,1,0],[0,2,4,6,8,1,3,5,7]]
+            parameterarray[(reorder[chain_index])[parameter_count]].style.display = "block";
+            console.log(parameterarray[(reorder[chain_index])[parameter_count]]);
+
+            let linewidthSlider = document.getElementById("linewidthSlider");
+            let fontSizeSlider = document.getElementById("fontsizeslider");
+            let lineheightSlider = document.getElementById("lineheightSlider");
+            let hueSlider = document.getElementById("hueSlider");
+            let saturationSlider = document.getElementById("saturationSlider");
+            let lightnessSlider = document.getElementById("lightnessSlider");
+            let huebgSlider = document.getElementById("huebgSlider");
+            let saturationbgSlider = document.getElementById("saturationbgSlider");
+            let lightnessbgSlider = document.getElementById("lightnessbgSlider");
+
+
+            let linewidthSave = document.getElementById("linewidthSave");
+            let fontsizeSave = document.getElementById("fontsizeSave");
+            let lineheightSave = document.getElementById("lineheightSave");
+            let fonthueSave = document.getElementById("fonthueSave");
+            let fontsaturationSave = document.getElementById("fontsaturationSave");
+            let fontlightnessSave = document.getElementById("fontlightnessSave");
+            let bghueSave = document.getElementById("bghueSave");
+            let bgsaturationSave = document.getElementById("bgsaturationSave");
+            let bglightnessSave = document.getElementById("bglightnessSave");
+
+
+            let selectLinewidth = false;
+            let selectFont = false;
+            let selectLineheight = false;
+            let selectFonthue = false;
+            let selectFontsaturation = false;
+            let selectFontlightness = false;
+            let selectBghue = false;
+            let selectBgsaturation = false;
+            let selectBglightness = false;
+
+            let rightbar = document.getElementById("rightbar");
+            let minimizeIcon = document.getElementById("minimizeIcon");
+            let minimizeSlider = document.getElementById("minimizeSlider")
+
+            minimizeSlider.style.display = "none";
+
+            render(chain_index);
+
+            function render(index) {
+                let content = document.getElementById("content");
+                linewidthSlider.value = vectorspace[index].linewidth;
+                content.style.width = linewidthSlider.value + 'px';
+
+                let linewidthOutput = document.getElementById("linewidthOutput");
+                linewidthOutput.innerHTML = linewidthSlider.value + 'px';
+
+                let fonts = document.getElementsByClassName("post-content-preview");
+                fontSizeSlider.value = vectorspace[index].fontsize;
+                lineheightSlider.value = vectorspace[index].lineheight;
+                hueSlider.value = vectorspace[index].fonthue;
+                saturationSlider.value = vectorspace[index].fontsaturation;
+                lightnessSlider.value = vectorspace[index].fontlightness;
+
+
+                for (let i = 0; i < fonts.length; i++) {
+                    fonts[i].style.fontSize = fontSizeSlider.value + 'px';
+                    fonts[i].style.lineHeight = lineheightSlider.value;
+                    fonts[i].style.color = 'hsl(' + hueSlider.value + ', ' + saturationSlider.value + '%' + ', ' + lightnessSlider.value + '%' + ')';
+                }
+
+
+                huebgSlider.value = vectorspace[index].backgroundhue;
+                saturationbgSlider.value = vectorspace[index].backgroundsaturation;
+                lightnessbgSlider.value = vectorspace[index].backgroundlightness;
+                document.body.style.backgroundColor = 'hsl(' + huebgSlider.value + ', ' + saturationbgSlider.value + '%' + ', ' + lightnessbgSlider.value + '%' + ')';
+
+
+
+                let output = document.getElementById("fontsizeoutput");
+                output.innerHTML = fontSizeSlider.value + 'px';
+                let lineheightOutput = document.getElementById("lineheightOutput");
+                lineheightOutput.innerHTML = lineheightSlider.value;
+                let hueOutput = document.getElementById("hueOutput");
+                hueOutput.innerHTML = hueSlider.value;
+                let saturationOutput = document.getElementById("saturationOutput");
+                saturationOutput.innerHTML = saturationSlider.value + '%';
+                let lightnessOutput = document.getElementById("lightnessOutput");
+                lightnessOutput.innerHTML = lightnessSlider.value + '%';
+                let huebgOutput = document.getElementById("huebgOutput");
+                huebgOutput.innerHTML = huebgSlider.value;
+                let saturationbgOutput = document.getElementById("saturationbgOutput");
+                saturationbgOutput.innerHTML = saturationbgSlider.value + '%';
+                let lightnessbgOutput = document.getElementById("lightnessbgOutput");
+                lightnessbgOutput.innerHTML = lightnessbgSlider.value + '%';
+            }
+
+            function reset() {
+
+                vector0.linewidth = Math.floor(Math.random() * (201) + 800);
+                vector1.linewidth = Math.floor(Math.random() * (201) + 800);
+                vector2.linewidth = Math.floor(Math.random() * (201) + 800);
+
+                selectLinewidth = false;
+                selectFont = false;
+                selectLineheight = false;
+                selectFonthue = false;
+                selectFontsaturation = false;
+                selectFontlightness = false;
+                selectBghue = false;
+                selectBgsaturation = false;
+                selectBglightness = false;
+
+
+                visitlinewidth = 0;
+                visitfontsize = 0;
+                visitlineheight = 0;
+                visitfonthue = 0;
+                visitfontsaturation = 0;
+                visitfontlightness = 0;
+                visitbackgroundhue = 0;
+                visitbackgroundsaturation = 0;
+                visitbackgroundlightness = 0;
+
+                parameter_count = 0;
+                chain_index = 0;
+                chain.innerHTML = chain_index +1;
+                linewidth.style.display = "block";
+                fontsize.style.display = "none";
+                lineheight.style.display = "none";
+                fontHue.style.display = "none";
+                fontSaturation.style.display = "none";
+                fontLightness.style.display = "none";
+                bgHue.style.display = "none";
+                bgSaturation.style.display = "none";
+                bgLightness.style.display = "none";
+
+
+                render(chain_index);
+
+            }
+
+
+            linewidthSlider.oninput = function () {
+                selectLinewidth = true;
+                let content = document.getElementById("content");
+                content.style.width = linewidthSlider.value + 'px';
+                let linewidthOutput = document.getElementById("linewidthOutput");
+                linewidthOutput.innerHTML = linewidthSlider.value + 'px';
+            }
+
+            linewidthSlider.onmousedown = function (event) {
+                event.stopPropagation();
+            }
+
+            linewidthSave.onclick = function () {
+                if (selectLinewidth === true) {
+                    if (visitlinewidth >= 2) {
+                        if (parameter_count == 8 && chain_index == 2) {
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[0])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[1])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[2])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            let count = Number(iteration.innerText);
+                            if (count > 1) {
+                                parameter_count++;
+                                count--;
+                                iteration.innerText = count;
+                                reset();
+                            }
+                            else {
+                                alert("You have completed all the experiments. Thank you very much");
+                                window.location.href = "/";
+                            }
+                        } else {
+                            if(chain_index == 2){
+                                parameter_count++;
+                            }
+                            vectorspace[chain_index].linewidth = linewidthSlider.value;
+                            console.log( vectorspace[chain_index].linewidth);
+                            chain_index = (chain_index + 1) % 3;
+                            console.log(chain_index);
+                            chain.innerHTML = chain_index + 1;
+                            render(chain_index);
+                            linewidth.style.display = "none";
+                            parameterarray[(reorder[chain_index])[parameter_count]].style.display = "block";
+                            /* let fonts = document.getElementsByClassName("post-content-preview");
+                             let val = Math.floor(Math.random() * (19) + 12);
+                             fontSizeSlider.value = val;
+                             for (let i = 0; i < fonts.length; i++) {
+                                 fonts[i].style.fontSize = fontSizeSlider.value + 'px';
+                             }
+                             let fontsizeOutput = document.getElementById("fontsizeoutput");
+                             fontsizeOutput.innerHTML = fontSizeSlider.value + 'px';*/
+                        }
+                    }
+                    else {
+                        if(chain_index == 2){
+                            parameter_count++;
+                        }
+                        visitlinewidth++; //2
+                        vectorspace[chain_index].linewidth = linewidthSlider.value;
+                        console.log(vectorspace[chain_index].linewidth);
+                        chain_index = (chain_index + 1) % 3;
+                        console.log(chain_index);//0
+                        chain.innerHTML = chain_index + 1;
+                        render(chain_index);
+                        
+                        linewidth.style.display = "none";
+                        parameterarray[(reorder[chain_index])[parameter_count]].style.display = "block";
+                        console.log("hhhhhhh")
+                       
+                    }
+                }
+                else {
+                    alert("Please move the slider to choose a value you think is appropriate");
+                }
+            }
+
+            fontSizeSlider.oninput = function () {
+
+                selectFont = true;
+                let fonts = document.getElementsByClassName("post-content-preview");
+                for (let i = 0; i < fonts.length; i++) {
+                    fonts[i].style.fontSize = fontSizeSlider.value + 'px';
+                }
+                let output = document.getElementById("fontsizeoutput");
+                output.innerHTML = fontSizeSlider.value + 'px';
+
+            }
+
+            fontSizeSlider.onmousedown = function (event) {
+                event.stopPropagation();
+            }
+
+            fontsizeSave.onclick = function () {
+                if (selectFont === true) {
+                    if (visitfontsize >= 2) {
+                        if (parameter_count == 8 && chain_index == 2) {
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[0])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[1])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[2])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            let count = Number(iteration.innerText);
+                            if (count > 1) {
+                                parameter_count++;
+                                count--;
+                                iteration.innerText = count;
+                                reset();
+                            }
+                            else {
+                                alert("You have completed all the experiments. Thank you veru much");
+                                window.location.href = "/";
+                            }
+                        }
+                        else {
+                            if(chain_index == 2){
+                                parameter_count++;
+                            }
+                            vectorspace[chain_index].fontsize = fontSizeSlider.value;
+                            console.log(vectorspace[chain_index].fontsize);
+                            chain_index = (chain_index + 1) % 3;
+                            console.log(chain_index);
+                            chain.innerHTML = chain_index + 1;
+                            render(chain_index);
+                            fontsize.style.display = "none";
+                            parameterarray[(reorder[chain_index])[parameter_count]].style.display = "block";
+                            /*let fonts = document.getElementsByClassName("post-content-preview");
+                            let val = Math.random() * (11);
+                            lineheightSlider.value = val;
+                            for (let i = 0; i < fonts.length; i++) {
+                                fonts[i].style.lineHeight = lineheightSlider.value;
+                            }
+                            let lineheightOutput = document.getElementById("lineheightOutput");
+                            lineheightOutput.innerHTML = lineheightSlider.value;*/
+                        }
+                    }
+                    else {
+                        if(chain_index == 2){
+                            parameter_count++;
+                        }
+                        visitfontsize++;
+                        vectorspace[chain_index].fontsize = fontSizeSlider.value;
+                        console.log(vectorspace[chain_index].fontsize);
+                        chain_index = (chain_index + 1) % 3;
+                        console.log(chain_index);
+                        chain.innerHTML = chain_index + 1;
+                        render(chain_index);
+                        fontsize.style.display = "none";
+                        parameterarray[(reorder[chain_index])[parameter_count]].style.display = "block";
+                    }
+                }
+                else {
+                    alert("Please move the slider to choose a value you think is appropriate");
+                }
+            }
+
+
+            lineheightSlider.oninput = function () {
+                selectLineheight = true;
+                let fonts = document.getElementsByClassName("post-content-preview");
+                for (let i = 0; i < fonts.length; i++) {
+                    fonts[i].style.lineHeight = lineheightSlider.value;
+                }
+                let lineheightOutput = document.getElementById("lineheightOutput");
+                lineheightOutput.innerHTML = lineheightSlider.value;
+            }
+
+            lineheightSave.onclick = function () {
+                if (selectLineheight === true) {
+                    if (visitlineheight >= 2) {
+                        if (parameter_count == 8 && chain_index == 2) {
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[0])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[1])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[2])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            let count = Number(iteration.innerText);
+                            if (count > 1) {
+                                parameter_count++;
+                                count--;
+                                iteration.innerText = count;
+                                reset();
+                            }
+                            else {
+                                alert("You have completed all the experiments. Thank you veru much");
+                                window.location.href = "/";
+                            }
+                        } else {
+                            if(chain_index == 2){
+                                parameter_count++;
+                            }
+                            vectorspace[chain_index].lineheight = lineheightSlider.value;
+                            console.log(vectorspace[chain_index].lineheight)
+                            chain_index = (chain_index + 1) % 3;
+                            console.log(chain_index);
+                            chain.innerHTML = chain_index + 1;
+                            render(chain_index);
+                            lineheight.style.display = "none";
+                            parameterarray[(reorder[chain_index])[parameter_count]].style.display = "block";
+                            /* let saturation = saturationSlider.value;
+                             let lightness = lightnessSlider.value;
+                             let fonts = document.getElementsByClassName("post-content-preview");
+                             let val = Math.floor(Math.random() * (361));
+                             hueSlider.value = val;
+                             for (let i = 0; i < fonts.length; i++) {
+                                 let hue = hueSlider.value;
+                                 fonts[i].style.color = 'hsl(' + hue + ', ' + saturation + '%' + ', ' + lightness + '%' + ')';
+                             }
+                             let hueOutput = document.getElementById("hueOutput");
+                             hueOutput.innerHTML = hueSlider.value;*/
+                        }
+                    }
+                    else {
+                        if(chain_index == 2){
+                            parameter_count++;
+                        }
+                        visitlineheight++;
+                        vectorspace[chain_index].lineheight = lineheightSlider.value;
+                        console.log(vectorspace[chain_index].lineheight)
+                        chain_index = (chain_index + 1) % 3;
+                        console.log(chain_index);
+                        chain.innerHTML = chain_index + 1;
+                        render(chain_index);
+                        lineheight.style.display = "none";
+                        parameterarray[(reorder[chain_index])[parameter_count]].style.display = "block";
+                    }
+                }
+                else {
+                    alert("Please move the slider to choose a value you think is appropriate");
+                }
+            }
+
+            lineheightSlider.onmousedown = function (event) {
+                event.stopPropagation();
+            }
+
+            hueSlider.oninput = function () {
+                selectFonthue = true;
+                let saturation = saturationSlider.value;
+                let lightness = lightnessSlider.value;
+                let fonts = document.getElementsByClassName("post-content-preview");
+                for (let i = 0; i < fonts.length; i++) {
+                    let hue = hueSlider.value;
+                    fonts[i].style.color = 'hsl(' + hue + ', ' + saturation + '%' + ', ' + lightness + '%' + ')';
+                }
+                let hueOutput = document.getElementById("hueOutput");
+                hueOutput.innerHTML = hueSlider.value;
+            }
+
+
+            fonthueSave.onclick = function () {
+                if (selectFonthue === true) {
+                    if (visitfonthue >= 2) {
+                        if (parameter_count == 8 && chain_index == 2) {
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[0])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[1])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[2])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            let count = Number(iteration.innerText);
+                            if (count > 1) {
+                                parameter_count++;
+                                count--;
+                                iteration.innerText = count;
+                                reset();
+                            }
+                            else {
+                                alert("You have completed all the experiments. Thank you veru much");
+                                window.location.href = "/";
+                            }
+                        } else {
+                            if(chain_index == 2){
+                                parameter_count++;
+                            }
+                            vectorspace[chain_index].fonthue = hueSlider.value;
+                            console.log(vectorspace[chain_index].fonthue);
+                            chain_index = (chain_index + 1) % 3;
+                            console.log(chain_index);
+                            chain.innerHTML = chain_index + 1;
+                            render(chain_index);
+                            fontHue.style.display = "none";
+                            parameterarray[(reorder[chain_index])[parameter_count]].style.display = "block";
+                            /* let hue = hueSlider.value;
+                             let lightness = lightnessSlider.value;
+                             let fonts = document.getElementsByClassName("post-content-preview");
+                             let val = Math.floor(Math.random() * (101));
+                             saturationSlider.value = val;
+ 
+                             for (let i = 0; i < fonts.length; i++) {
+                                 let saturation = saturationSlider.value;
+                                 fonts[i].style.color = 'hsl(' + hue + ', ' + saturation + '%' + ', ' + lightness + '%' + ')';
+                             }
+                             let saturationOutput = document.getElementById("saturationOutput");
+                             saturationOutput.innerHTML = saturationSlider.value + '%';*/
+                        }
+                    }
+                    else {
+                        if(chain_index == 2){
+                            parameter_count++;
+                        }
+                        visitfonthue++;
+                        vectorspace[chain_index].fonthue = hueSlider.value;
+                        console.log(vectorspace[chain_index].fonthue);
+                        chain_index = (chain_index + 1) % 3;
+                        console.log(chain_index);
+                        chain.innerHTML = chain_index + 1;
+                        render(chain_index);
+                        fontHue.style.display = "none";
+                        parameterarray[(reorder[chain_index])[parameter_count]].style.display = "block";
+                    }
+                }
+                else {
+                    alert("Please move the slider to choose a value you think is appropriate");
+                }
+            }
+
+            hueSlider.onmousedown = function (event) {
+                event.stopPropagation();
+            }
+
+            saturationSlider.oninput = function () {
+                selectFontsaturation = true;
+                let hue = hueSlider.value;
+                let lightness = lightnessSlider.value;
+                let fonts = document.getElementsByClassName("post-content-preview");
+                for (let i = 0; i < fonts.length; i++) {
+                    let saturation = saturationSlider.value;
+                    fonts[i].style.color = 'hsl(' + hue + ', ' + saturation + '%' + ', ' + lightness + '%' + ')';
+                }
+                let saturationOutput = document.getElementById("saturationOutput");
+                saturationOutput.innerHTML = saturationSlider.value + '%';
+            }
+
+            fontsaturationSave.onclick = function () {
+                if (selectFontsaturation === true) {
+                    if (visitfontsaturation >= 2) {
+                        if (parameter_count == 8 && chain_index == 2) {
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[0])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[1])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[2])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            let count = Number(iteration.innerText);
+                            if (count > 1) {
+                                parameter_count++;
+                                count--;
+                                iteration.innerText = count;
+                                reset();
+                            }
+                            else {
+                                alert("You have completed all the experiments. Thank you veru much");
+                                window.location.href = "/";
+                            }
+                        } else {
+                            if(chain_index == 2){
+                                parameter_count++;
+                            }
+                            vectorspace[chain_index].fontsaturation = saturationSlider.value;
+                            console.log(vectorspace[chain_index].fontsaturation)
+                            chain_index = (chain_index + 1) % 3;
+                            console.log(chain_index);
+                            chain.innerHTML = chain_index + 1;
+                            render(chain_index);
+                            fontSaturation.style.display = "none";
+                            parameterarray[(reorder[chain_index])[parameter_count]].style.display = "block";
+                            /*let hue = hueSlider.value;
+                            let saturation = saturationSlider.value;
+                            let fonts = document.getElementsByClassName("post-content-preview");
+                            let val = Math.floor(Math.random() * (101));
+                            lightnessSlider.value = val;
+
+                            for (let i = 0; i < fonts.length; i++) {
+                                let lightness = lightnessSlider.value;
+                                fonts[i].style.color = 'hsl(' + hue + ', ' + saturation + '%' + ', ' + lightness + '%' + ')';
+                            }
+
+                            let lightnessOutput = document.getElementById("lightnessOutput");
+                            lightnessOutput.innerHTML = lightnessSlider.value + '%';*/
+                        }
+                    }
+                    else {
+                        if(chain_index == 2){
+                            parameter_count++;
+                        }
+                        visitfontsaturation++;
+                        vectorspace[chain_index].fontsaturation = saturationSlider.value;
+                        console.log(vectorspace[chain_index].fontsaturation)
+                        chain_index = (chain_index + 1) % 3;
+                        console.log(chain_index);
+                        chain.innerHTML = chain_index + 1;
+                        render(chain_index);
+                        fontSaturation.style.display = "none";
+                        parameterarray[(reorder[chain_index])[parameter_count]].style.display = "block";
+                    }
+                }
+                else {
+                    alert("Please move the slider to choose a value you think is appropriate");
+                }
+            }
+
+            saturationSlider.onmousedown = function (event) {
+                event.stopPropagation();
+            }
+
+            lightnessSlider.oninput = function () {
+                selectFontlightness = true;
+                let hue = hueSlider.value;
+                let saturation = saturationSlider.value;
+                let fonts = document.getElementsByClassName("post-content-preview");
+
+                for (let i = 0; i < fonts.length; i++) {
+                    let lightness = lightnessSlider.value;
+                    fonts[i].style.color = 'hsl(' + hue + ', ' + saturation + '%' + ', ' + lightness + '%' + ')';
+                }
+                let lightnessOutput = document.getElementById("lightnessOutput");
+                lightnessOutput.innerHTML = lightnessSlider.value + '%';
+            }
+
+            lightnessSlider.onmousedown = function (event) {
+                event.stopPropagation();
+            }
+
+            fontlightnessSave.onclick = function () {
+                if (selectFontlightness === true) {
+                    if (visitfontlightness >= 2) {
+                        if (parameter_count == 8 && chain_index == 2) {
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[0])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[1])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[2])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            let count = Number(iteration.innerText);
+                            if (count > 1) {
+                                parameter_count++;
+                                count--;
+                                iteration.innerText = count;
+                                reset();
+                            }
+                            else {
+                                alert("You have completed all the experiments. Thank you veru much");
+                                window.location.href = "/";
+                            }
+                        } else {
+                            if(chain_index == 2){
+                                parameter_count++;
+                            }
+        
+                            vectorspace[chain_index].fontlightness = lightnessSlider.value;
+                            console.log(vectorspace[chain_index].fontlightness)
+                            chain_index = (chain_index + 1) % 3;
+                            console.log(chain_index)
+                            chain.innerHTML = chain_index + 1;
+                            render(chain_index);
+                            fontLightness.style.display = "none";
+                            parameterarray[(reorder[chain_index])[parameter_count]].style.display = "block";
+                            /*let saturation = saturationbgSlider.value;
+                            let lightness = lightnessbgSlider.value;
+                            let val = Math.floor(Math.random() * (361));
+                            huebgSlider.value = val;
+                            let hue = huebgSlider.value;
+                            document.body.style.backgroundColor = 'hsl(' + hue + ', ' + saturation + '%' + ', ' + lightness + '%' + ')';
+                            let huebgOutput = document.getElementById("huebgOutput");
+                            huebgOutput.innerHTML = huebgSlider.value;*/
+                        }
+                    }
+                    else {
+                        if(chain_index == 2){
+                            parameter_count++;
+                        }
+                        visitfontlightness++;
+                        vectorspace[chain_index].fontlightness = lightnessSlider.value;
+                        console.log(vectorspace[chain_index].fontlightness)
+                        chain_index = (chain_index + 1) % 3;
+                        console.log(chain_index)
+                        chain.innerHTML = chain_index + 1;
+                        render(chain_index)
+                        fontLightness.style.display = "none";
+                        parameterarray[(reorder[chain_index])[parameter_count]].style.display = "block";
+                    }
+                }
+                else {
+                    alert("Please move the slider to choose a value you think is appropriate");
+                }
+            }
+
+
+
+            huebgSlider.oninput = function () {
+                selectBghue = true;
+                let hue = huebgSlider.value;
+                let saturation = saturationbgSlider.value;
+                let lightness = lightnessbgSlider.value;
+                document.body.style.backgroundColor = 'hsl(' + hue + ', ' + saturation + '%' + ', ' + lightness + '%' + ')';
+                let huebgOutput = document.getElementById("huebgOutput");
+                huebgOutput.innerHTML = huebgSlider.value;
+            }
+
+            huebgSlider.onmousedown = function (event) {
+                event.stopPropagation();
+            }
+
+            bghueSave.onclick = function () {
+                if (selectBghue === true) {
+                    if (visitbackgroundhue >= 2) {
+                        if (parameter_count == 8 && chain_index == 2) {
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[0])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[1])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[2])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            let count = Number(iteration.innerText);
+                            if (count > 1) {
+                                parameter_count++;
+                                count--;
+                                iteration.innerText = count;
+                                reset();
+                            }
+                            else {
+                                alert("You have completed all the experiments. Thank you veru much");
+                                window.location.href = "/";
+                            }
+                        } else {
+                            if(chain_index == 2){
+                                parameter_count++;
+                            }
+                            vectorspace[chain_index].backgroundhue = huebgSlider.value;
+                            console.log(vectorspace[chain_index].backgroundhue)
+                            chain_index = (chain_index + 1) % 3;
+                            console.log(chain_index)
+                            chain.innerHTML = chain_index + 1;
+                            render(chain_index);
+                            bgHue.style.display = "none";
+                            parameterarray[(reorder[chain_index])[parameter_count]].style.display = "block";
+                            /*let hue = huebgSlider.value;
+                            let lightness = lightnessbgSlider.value;
+                            let val = Math.floor(Math.random() * (101));
+                            saturationbgSlider.value = val;
+                            let saturation = saturationbgSlider.value;
+                            document.body.style.backgroundColor = 'hsl(' + hue + ', ' + saturation + '%' + ', ' + lightness + '%' + ')';
+                            let saturationbgOutput = document.getElementById("saturationbgOutput");
+                            saturationbgOutput.innerHTML = saturationbgSlider.value + '%';*/
+                        }
+                    }
+                    else {
+                        if(chain_index == 2){
+                            parameter_count++;
+                        }
+                        visitbackgroundhue++;
+                        vectorspace[chain_index].backgroundhue = huebgSlider.value;
+                        console.log(vectorspace[chain_index].backgroundhue)
+                        chain_index = (chain_index + 1) % 3;
+                        console.log(chain_index)
+                        chain.innerHTML = chain_index + 1;
+                        render(chain_index)
+                        bgHue.style.display = "none";
+                        parameterarray[(reorder[chain_index])[parameter_count]].style.display = "block";
+                    }
+                }
+                else {
+                    alert("Please move the slider to choose a value you think is appropriate");
+                }
+
+            }
+
+
+            saturationbgSlider.oninput = function () {
+                selectBgsaturation = true;
+                let hue = huebgSlider.value;
+                let saturation = saturationbgSlider.value;
+                let lightness = lightnessbgSlider.value;
+                document.body.style.backgroundColor = 'hsl(' + hue + ', ' + saturation + '%' + ', ' + lightness + '%' + ')';
+                let saturationbgOutput = document.getElementById("saturationbgOutput");
+                saturationbgOutput.innerHTML = saturationbgSlider.value + '%';
+            }
+
+            saturationbgSlider.onmousedown = function (event) {
+                event.stopPropagation();
+            }
+
+            bgsaturationSave.onclick = function () {
+                if (selectBgsaturation === true) {
+                    if (visitbackgroundsaturation >= 2) {
+                        if (parameter_count == 8 && chain_index == 2) {
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[0])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[1])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[2])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            let count = Number(iteration.innerText);
+                            if (count > 1) {
+                                parameter_count++;
+                                count--;
+                                iteration.innerText = count;
+                                reset();
+                            }
+                            else {
+                                alert("You have completed all the experiments. Thank you veru much");
+                                window.location.href = "/";
+                            }
+                        } else {
+                            if(chain_index == 2){
+                                parameter_count++;
+                            }
+                            vectorspace[chain_index].backgroundsaturation = saturationbgSlider.value;
+                            console.log(vectorspace[chain_index].backgroundsaturation)
+                            chain_index = (chain_index + 1) % 3;
+                            console.log(chain_index)
+                            chain.innerHTML = chain_index + 1;
+                            render(chain_index);
+                            bgSaturation.style.display = "none";
+                            parameterarray[(reorder[chain_index])[parameter_count]].style.display = "block";
+                            /*let hue = huebgSlider.value;
+                            let saturation = saturationbgSlider.value;
+                            let val = Math.floor(Math.random() * (101));
+                            lightnessbgSlider.value = val;
+                            let lightness = lightnessbgSlider.val;
+                            document.body.style.backgroundColor = 'hsl(' + hue + ', ' + saturation + '%' + ', ' + lightness + '%' + ')';
+                            let lightnessbgOutput = document.getElementById("lightnessbgOutput");
+                            lightnessbgOutput.innerHTML = lightnessbgSlider.value + '%';*/
+                        }
+                    }
+                    else {
+                        if(chain_index == 2){
+                            parameter_count++;
+                        }
+                        visitbackgroundsaturation++;
+                        vectorspace[chain_index].backgroundsaturation = saturationbgSlider.value;
+                        console.log(vectorspace[chain_index].backgroundsaturation)
+                        chain_index = (chain_index + 1) % 3;
+                        console.log(chain_index)
+                        chain.innerHTML = chain_index + 1;
+                        render(chain_index)
+                        bgSaturation.style.display = "none";
+                        parameterarray[(reorder[chain_index])[parameter_count]].style.display = "block";
+                    }
+                }
+                else {
+                    alert("Please move the slider to choose a value you think is appropriate");
+                }
+            }
+
+            lightnessbgSlider.oninput = function () {
+                selectBglightness = true;
+                let hue = huebgSlider.value;
+                let saturation = saturationbgSlider.value;
+                let lightness = lightnessbgSlider.value;
+                document.body.style.backgroundColor = 'hsl(' + hue + ', ' + saturation + '%' + ', ' + lightness + '%' + ')';
+                let lightnessbgOutput = document.getElementById("lightnessbgOutput");
+                lightnessbgOutput.innerHTML = lightnessbgSlider.value + '%';
+            }
+
+            lightnessbgSlider.onmousedown = function (event) {
+                event.stopPropagation();
+            }
+
+            bglightnessSave.onclick = function () {
+                if (selectBglightness === true) {
+                    if (visitbackgroundlightness >= 2) {
+                        if (parameter_count == 8 && chain_index == 2) {
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[0])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[1])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            axios.post('/experiment/', {
+                                headers: {
+                                    'Content-Type': 'application.json'
+                                },
+                                data: JSON.stringify(vectorspace[2])
+                            }).then(value => {
+                                console.log(value)
+                            })
+
+                            let count = Number(iteration.innerText);
+                            if (count > 1) {
+                                count--;
+                                iteration.innerText = count;
+                                reset();
+                            }
+                            else {
+                                alert("You have completed all the experiments. Thank you veru much");
+                                window.location.href = "/";
+                            }
+                        }
+                        else {
+                            if(chain_index == 2){
+                                parameter_count++;
+                            }
+                            vectorspace[chain_index].backgroundlightness = lightnessbgSlider.value;
+                            console.log(vectorspace[chain_index].backgroundlightness)
+                            chain_index = (chain_index + 1) % 3;
+                            console.log(chain_index)
+                            chain.innerHTML = chain_index + 1;
+                            render(chain_index);
+                            bgLightness.style.display = "none";
+                            parameterarray[(reorder[chain_index])[parameter_count]].style.display = "block";
+                        }
+                    }
+                    else {
+                        if(chain_index == 2){
+                            parameter_count++;
+                        }
+                        visitbackgroundlightness++; //1
+                        vectorspace[chain_index].backgroundlightness = lightnessbgSlider.value;
+                        console.log(vectorspace[chain_index].backgroundlightness)
+                        chain_index = (chain_index + 1) % 3;
+                        console.log(chain_index) //2
+                        chain.innerHTML = chain_index + 1;
+                        render(chain_index)
+                        bgLightness.style.display = "none";
+                        parameterarray[(reorder[chain_index])[parameter_count]].style.display = "block";
+                        console.log("aaaaaaa")
+                    }
+                }
+                else {
+                    alert("Please move the slider to choose a value you think is appropriate");
+                }
+
+
+            }
+
+            minimizeIcon.onclick = function () {
+                let sidebar = minimizeIcon.parentElement.parentElement;
+                sidebar.style.display = "none";
+                minimizeSlider.style.display = "block";
+            }
+
+            minimizeSlider.onclick = function () {
+                if (minimizeSlider.style.display === "block") {
+                    minimizeSlider.style.display = "none";
+                    let sidebar = minimizeIcon.parentElement.parentElement;
+                    sidebar.style.display = "block";
+                }
+            }
+
+            let sidebarContainer = document.getElementById("sidebar-container");
+            sidebarContainer.onmousedown = function (event) {
+                if (isSlider === false) {
+                    var ol = event.clientX - sidebarContainer.offsetLeft;
+                    var ot = event.clientY - sidebarContainer.offsetTop;
+
+                    document.onmousemove = function (event) {
+                        var left = event.clientX - ol;
+                        var top = event.clientY - ot;
+
+                        sidebarContainer.style.left = left + 'px';
+                        sidebarContainer.style.top = top + 'px';
+                    }
+
+                    document.onmouseup = function (event) {
+                        document.onmousemove = null;
+                        document.onmouseup = null;
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+
+<body>
+    <header class="intro-header" style="height: 350px; background-image: url('/img/newbg.png')">
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="">All Posts</a>
+                    </li>
+
+
+                    <li>
+                        <a href="">Open-source</a>
+                    </li>
+
+                    <li>
+                        <a href="">Presentation</a>
+                    </li>
+
+                    <li>
+                        <a href="">Publication</a>
+                    </li>
+
+                    <li><a href="">About</a></li>
+                </ul>
+            </div>
+        </div>
+        <img id="minimizeSlider" src="img/blackboard.jpeg" width=70px
+            style="position: fixed; top: 5px; right:5px; cursor: pointer;" />
+        <div class="container">
+            <div class="row">
+                <div class="site-heading" style="margin-top:-70px">
+                    <h1 style="font-size:48px; text-align: center;">An Customised Blog Template</h1>
+                </div>
+            </div>
+            <div
+                style="margin-left: 320px;margin-top: -120px; margin-bottom: 40px; width: 500px; color:white; font-size:18px; text-align: center">
+                A journey of a thousand miles begins with a single step</div>
+        </div>
+    </header>
+
+
+
+    <div id="content" class="container">
+        <div class="post-preview">
+            <div class="post-content-preview">
+                Write in reverse chronological order. Don’t forget to include your degree(s) including the
+                institution where you studied, your degree title(s) and the passes you achieved. If you are
+                applying for your first post after graduating, then this section can do more than just list
+                your educational achievements: you can highlight units, modules and projects from your degree
+                course which are relevant to the post you are applying for. For instance, final year projects
+                area useful to promote as they provide evidence of project management skills. You may want to
+                add information about your secondary education especially if it shows skills such as languages.
+                Stating your ‘A’ levels is a good idea but avoid lists of your GCSE’s.
+                You could say which school you attended.
+            </div>
+        </div>
+        <hr>
+
+        <div class="post-preview">
+            <div class="post-content-preview">
+                Did you win any prizes or awards, have a position of responsibility, captained a team, organised
+                an event or were recognised for anything else you have done? What about any other
+                extra-curricular activities? You should include those which support your application/CV. A
+                popular subheading is ‘Responsibilities, Interests and Achievements’ usually towards the end or
+                page 2 of your CV. You can highlight transferable skills and qualities through this section. If
+                you have limited achievements to offer, then leave this heading out and replace it with another
+                heading more relevant to your experience.
+            </div>
+
+        </div>
+        <hr>
+
+        <div class="post-preview">
+            <div class="post-content-preview">
+                This is the section which raises more questions at interview. Again, write in reverse
+                chronological order including your job title, the organisation you worked for and dates (just
+                the year is sufficient). You could add relevant jobs you did as a student. Only add those which
+                add to your experience and skill base relevant to the job you are applying for. Be careful that
+                you do not write a job description but write about what you achieved in that job starting each
+                statement with an action/power word. This is where you can link your work experience to the
+                skills you highlighted in your Personal Statement.
+            </div>
+        </div>
+        <hr>
+
+        <div class="post-preview">
+            <div class="post-content-preview">
+                Tailor this section to the skills the employer/recruiter wants. This could be a combination or
+                technical and soft skills. If you have already demonstrated some skills required for the role
+                elsewhere on your CV, then you do not need to repeat yourself here. It common to have languages,
+                IT and soft skills here.
+            </div>
+
+        </div>
+        <hr>
+
+
+        <div class="post-preview">
+            <div class="post-content-preview">
+                Interests - 'Socialising', 'going to the cinema' and 'reading' aren't going to catch a
+                recruiters attention. However, relevant interests can provide a more complete picture of who you
+                are, as well as giving you something to talk about at interview. Examples include writing your
+                own blog or community newsletters if you want to be a journalist, being part of a drama group if
+                you're looking to get into sales and your involvement in climate change activism if you'd like
+                an environmental job. If you don't have any relevant hobbies or interests leave this section
+                out.
+            </div>
+
+
+            <hr>
+
+
+        </div>
+
+        <div id="sidebar-container" class="sidebar">
+            <div class="clip">
+                <div class="ribbon"></div>
+                <div class="login"></div>
+            </div>
+            <ul class="nav">
+                <img id="minimizeIcon" style="position: absolute; left:0; cursor: pointer;" src="img/minimize.jpeg"
+                    width="17px"></img>
+                <div
+                    style="font-size:15px; font-weight: bold; color:white; position: relative; right:-25%; margin-top: 15px;">
+                    chain:&nbsp;<span id="chain">1</span>,&nbsp;<span id="iteration">30</span>/30
+                </div>
+                <div style="font-size:18px; color:white; font-weight:bold; margin-top: 5px; line-height: 1;">
+                    Pick best web parameter value</div>
+
+                <li id="linewidth">
+                    <div class="para">Line width</div>
+                    <input id="linewidthSlider" type="range" min="800" max="1000" value="800" step="10" />
+                    <label id="linewidthOutput">800px</label>
+                    <button id="linewidthSave" class="saveBtn">SAVE</button>
+                </li>
+
+                <li id="fontsize">
+                    <div class="para">Content Font Size </div>
+                    <input id="fontsizeslider" type="range" min="12" max="30" value="15" step="1" />
+                    <label id="fontsizeoutput">15px</label>
+                    <button id="fontsizeSave" class="saveBtn">SAVE</button>
+                </li>
+
+                <li id="lineheight">
+                    <div class="para">Line-height</div>
+                    <input id="lineheightSlider" type="range" min="1" max="2" value="1.7" step="0.1" />
+                    <label id="lineheightOutput">1.7</label>
+                    <button id="lineheightSave" class="saveBtn">SAVE</button>
+                </li>
+
+
+                <li id="fontHue">
+                    <div class="para">Font Hue</div>
+                    <input id="hueSlider" type="range" min="0" max="360" value="0" step="1" />
+                    <label id="hueOutput">0</label>
+                    <button id="fonthueSave" class="saveBtn">SAVE</button>
+                </li>
+                <li id="fontSaturation">
+                    <div class="para">Font Saturation</div>
+                    <input id="saturationSlider" type="range" min="0" max="100" value="100" step="1" />
+                    <label id="saturationOutput">100%</label>
+                    <button id="fontsaturationSave" class="saveBtn">SAVE</button>
+                </li>
+                <li id="fontLightness">
+                    <div class="para">Font Lightness</div>
+                    <input id="lightnessSlider" type="range" min="0" max="100" value="50" step="1" />
+                    <label id="lightnessOutput"> 50%</label>
+                    <button id="fontlightnessSave" class="saveBtn">SAVE</button>
+                </li>
+
+                <li id="bgHue">
+                    <div class="para">Background Hue</div>
+                    <input id="huebgSlider" type="range" min="0" max="360" value="0" step="1" />
+                    <label id="huebgOutput"> 0</label>
+                    <button id="bghueSave" class="saveBtn">SAVE</button>
+                </li>
+                <li id="bgSaturation">
+                    <div class="para">Background Saturation</div>
+                    <input id="saturationbgSlider" type="range" min="0" max="100" value="100" step="1" />
+                    <label id="saturationbgOutput">100%</label>
+                    <button id="bgsaturationSave" class="saveBtn">SAVE</button>
+                </li>
+                <li id="bgLightness">
+                    <div class="para">Background Lightness</div>
+                    <input id="lightnessbgSlider" type="range" min="0" max="100" value="50" step="1" />
+                    <label id="lightnessbgOutput">50%</label>
+                    <button id="bglightnessSave" class="saveBtn">SAVE</button>
+                </li>
+
+
+            </ul>
+
+        </div>
+
+    </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

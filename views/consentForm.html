@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Improving static websites by eliciting samples from people</title>
+    <link rel="stylesheet" href="/css/style1.css">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <style>
+        #form {
+            margin: auto;
+            width: 8.5in;
+            margin-top: 0.5in;
+            margin-bottom: 1in;
+            padding: 0.5in;
+            border-style: solid;
+            border-color: black;
+            border-width: 1px;
+            text-align: left;
+            line-height: normal;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: white;
+        }
+
+        #consent-logo {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 40%;
+            margin-top: -60px;
+        }
+
+        strong {
+            font-size: 17px;
+            line-height: 50px;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            var accept = document.getElementById("accept");
+            accept.onclick = function () {
+                let uuid = Date.now().toString(36) + Math.random().toString(36).substr(2)
+                alert('You have been assigned a unique id ' + uuid);
+                window.location.href = "/experiment?uuid=" + uuid + "";
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+    <div align="center">
+        <h2>
+            Please read the Participant Information Sheet and Consent Form below, <br /> and either click the
+            <span style="color: #4caf50">ACCEPT</span> button below to
+            <span style="color: #4caf50">continue</span>, or<br />
+            <span style="color: #d8565f">CLOSE</span> the tab to <span style="color: #d8565f">decline</span>.
+        </h2>
+
+    </div>
+
+
+    <div id="form">
+        <div class="box">
+            <p style="height:165px"><img id="consent-logo" src="/img/logo.png" /></p>
+            <p><strong style="font-size:30px"> Participant Information Sheet<br></strong>
+            <table border="1">
+                <tr>
+                    <td> Project title:</td>
+                    <td>Improving static websites by eliciting samples from people </td>
+                </tr>
+                <tr>
+                    <td> Principal investigator: </td>
+                    <td>Dr Christopher Lucas</td>
+                </tr>
+                <tr>
+                    <td> Researcher collecting data: </td>
+                    <td>Zike Li</td>
+                </tr>
+            </table><br> This study was certified according to the Informatics Research
+            Ethics Process, RT number XXXXX [edit accordingly]. Please take time to read the following
+            information carefully. You should keep this page for your records.
+            <br>
+            <strong> Who are the researchers?</strong>
+            <br> Zike Li and Dr Christopher Lucas
+            <br>
+            <strong> What is the purpose of the study? </strong>
+            <br>
+            To apply the “Gibbs sampling with people” method to explore people’s preferences for web
+            parameters of static websites.
+            <br>
+            <strong> Why have I been asked to take part?</strong>
+            <br> Anyone over the age of 18, with normal sensory abilities and from/residing in the UK can be
+            invited.
+            <br>
+            <strong> Do I have to take part?</strong> <br> The answer is ‘No’: It should be clear that
+            taking part is entirely voluntary.
+            The participant can withdraw if he/she later changes his/her mind, without giving a reason.
+            Your rights will not be affected. If you wish to withdraw, we will stop using your data in any
+            publications or reports submitted after you have withdrawn your consent.
+            <br>
+            <strong> What will happen to me if I decide to take part? </strong>
+            <br>You will be asked to move a slider to control the values of different web page parameters to
+            obtain the optimal page readability. The session will last 20 iterations (about 20 minutes).
+            <br>
+            <strong> Are there any possible disadvantages or risks from taking part?</strong>
+            <br> There are no significant risks associated with participation.
+            <br>
+            <strong> Are there any benefits associated with taking part?</strong>
+            <br> There are no direct benefits.
+            <br>
+            <strong> What happens at the end of the study? </strong>
+            <br> The results of this study may be summarised in
+            published articles, reports and presentations. Quotes or key findings will be anonymized: We
+            will remove any information that could, in our assessment, allow anyone to identify you. With
+            your consent, information can also be used for future research.
+            <br>
+            <strong> Will my taking part in the study be kept confidential?</strong>
+            <br> The data will be processed in accordance with Data Protection Law.
+            All information collected about you will be kept strictly confidential.
+            Each participant will be assigned to a unique identifier –
+            participants will not be asked for name or any other personal information.
+            Your data will only be viewed by researcher Zike Li and supervisor Dr Christopher Lucas.
+            All electronic data will be stored in a database on a password-protected, encrypted computer.
+            And store more than one copy, the copy could be uploaded to the University’s secure encrypted
+            cloud storage services ownCloud.
+            <br>
+            <strong> What will happen to my data?</strong>
+            <br> The University of Edinburgh is the data controller of the information you provide. You have
+            the right to access the information held about you. Your right of access may be exercised in
+            accordance with the Data Protection Act. You also have other rights, including the right to
+            correct, delete and object. For general information about how we use your data, go to:
+            edin.ac/privacy-research.
+            <br>
+            <strong> Who can I contact?</strong>
+            <br>If you have any further questions or wish to make a complaint about the study, please
+            contact the researcher Zike Li at s2193419@ed.ac.uk. When you contact us, please provide the
+            study title and question/complaint detail.
+            <br>
+            <strong> Updated information.</strong>
+            <br> If the research project changes in any way, an updated Participant Information Sheet will
+            be made available.
+            <br>
+            <br>
+            <strong style="font-size:30px"> Consent</strong>
+            <br> By proceeding with the study, I agree to all of the following statements:
+            <br> &nbsp;&nbsp;&nbsp;&nbsp;• I have read and understood the above information.
+            <br> &nbsp;&nbsp;&nbsp;&nbsp;• I understand that my participation is voluntary, and I can withdraw at any time.
+            <br> &nbsp;&nbsp;&nbsp;&nbsp;• I consent to my anonymised data being used in academic publications and presentations.
+            <br> &nbsp;&nbsp;&nbsp;&nbsp;• I allow my data to be used in future ethically approved research.
+            <br>
+            </p>
+
+
+            <button id="accept" class="button">
+                ACCEPT (will redirect to experiment)
+            </button>
+            <div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

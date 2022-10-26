@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Improving static websites by eliciting samples from people</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  <link rel="shortcut icon" href="/img/favicon.ico">
+  <style>
+    #button {
+      width: 200px;
+      height: 50px;
+      font-size: 18px;
+      display: block;
+      margin: 0 auto;
+      margin-top: 20px;
+      border: none;
+      color: #fff;
+      background-image: linear-gradient(30deg, #0400ff, #4ce3f7);
+      border-radius: 20px;
+      background-size: 100% auto;
+      font-family: inherit;
+      padding: 0.4em 1.5em;
+    }
+
+    .bottom {
+      text-align: center;
+    }
+
+    #button:hover {
+      background-position: right center;
+      background-size: 200% auto;
+      -webkit-animation: pulse 2s infinite;
+      animation: pulse512 1.5s infinite;
+    }
+
+    @keyframes pulse512 {
+      0% {
+        box-shadow: 0 0 0 0 #05bada66;
+      }
+
+      70% {
+        box-shadow: 0 0 0 10px rgb(218 103 68 / 0%);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgb(218 103 68 / 0%);
+      }
+    }
+  </style>
+  <script>
+    window.onload = function () {
+
+      var button = document.getElementById("button")
+      button.checked = false
+      button.onclick = function () {
+       /* let uuid = Date.now().toString(36) + Math.random().toString(36).substr(2)
+        alert('You have been assigned a unique id ' + uuid);
+        window.location.href = "/experiment?uuid=" + uuid + "";*/
+        window.location.href = "/consentForm";
+      }
+
+      var Seconds = 10;
+      var setIntervalID;
+      var box = document.getElementById("box");
+      function ok() {
+        var getid = document.getElementById("contract");
+        if (Seconds <= 0) {
+          getid.innerHTML = "I have read the notes carefully"
+          box.disabled = false;
+          clearInterval(setIntervalID);
+        }
+        else {
+          getid.innerHTML = "Please read the above notes carefully " + Seconds + "s left";
+          box.disabled = true;
+          button.disabled = true;
+          button.style.cursor = "not-allowed";
+        }
+        Seconds--;
+      }
+      setIntervalID = setInterval(ok, 1000);
+
+      box.onclick = function () {
+        if (box.checked === true) {
+          button.style.backgroundColor = 'rgba(85,85,85,0.9)';
+          button.disabled = false;
+          button.style.cursor = "pointer";
+        }
+        else {
+          button.style.backgroundColor = 'rgba(85,85,85,0.4)';
+          button.disabled = true;
+          button.style.cursor = "not-allowed";
+        }
+      }
+
+    }
+  </script>
+</head>
+
+<body class="ma0 avenir bg-near-white">
+  <header class="cover bg-top" style="background-image: url('/img/Research-Participants-Needed.png');">
+    <div class="bg-black-60">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+        <div class="flex-l justify-between items-center center">
+
+          <div class="flex-l items-center">
+
+
+
+
+
+          </div>
+        </div>
+      </nav>
+
+      <div class="tc-l pv4 pv6-l ph3 ph4-ns">
+        <h1 class="f2 f-subheadline-l fw2 white-90 mb0 lh-title">
+          Gibbs Sampling with People
+        </h1>
+
+        <h2 class="fw1 f5 f3-l white-80 measure-wide-l center mt3">
+          Improving the readability of static websites
+        </h2>
+
+      </div>
+    </div>
+  </header>
+
+
+  <main class="pb7" role="main">
+
+    <article class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy mid-gray">
+      <h1 class="mb-0">Welcome 👋</h1>
+      <p>to the experiment that applies "Gibbs Sampling with People" method to understand people's preferences for combinations of web parameters. The
+        following is a detailed description of the purpose and operation of the experiment, so be sure to read it
+        carefully and thank you for your cooperation!</p>
+    </article>
+
+    <div class="pa3 pa4-ns w-100 w-70-ns center">
+      <h1 class="flex-none">
+        Experiment Notes
+      </h1>
+      <section class="w-100 mw8">
+        <div class="relative w-100 mb4">
+          <article class="bb b--black-10">
+            <div class="db pv4 ph3 ph0-l no-underline dark-gray">
+              <div class="flex flex-column flex-row-ns"> 
+                <div class="pr3-ns mb4 mb0-ns w-100 w-40-ns">
+                  <a href="/post/chapter-6/" class="db grow">
+                    <img src="/img/intro.jpeg" class="img" alt="image from Chapter VI: Esmeralda">
+                  </a>
+                </div>
+
+                <div class="blah w-100 w-60-ns pl3-ns">
+                  <h1 class="f3 fw1 athelas mt0 lh-title">
+                    <h2 class="color-inherit dim link">
+                      Note I: Experiment Introduction
+                    </h2>
+                  </h1>
+                  <div class="f6 f5-l lh-copy nested-copy-line-height nested-links">
+                    “Gibbs sampling with people” (GSP) is an experimental method that embeds the idea of Gibbs sampling
+                    into the process of human participants doing experiments with the aim of learning human preferences.
+
+                    The method is presented by sequentially providing participants with a slider that manipulates the 
+                    corresponding parameter and asking them to adjust the slider to select the value that best matches a given criterion.
+
+                    In our case, we innovatively applies GSP to understand how people feel about different combinations
+                    of web parameters under a criteria "readability".
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="relative w-100 mb4">
+          <article class="bb b--black-10">
+            <div class="db pv4 ph3 ph0-l no-underline dark-gray">
+              <div class="flex flex-column flex-row-ns">
+                <div class="pr3-ns mb4 mb0-ns w-100 w-40-ns">
+                  <img src="/img/web.png" class="img" alt="image from Chapter VI: Esmeralda">
+                </div>
+                <div class="blah w-100 w-60-ns pl3-ns">
+                  <h1 class="f3 fw1 athelas mt0 lh-title">
+                    <h2 class="color-inherit dim link">
+                      Note II: Web Parameters
+                    </h2>
+                  </h1>
+                  <div class="f6 f5-l lh-copy nested-copy-line-height nested-links">
+                    Line width, title font size, content font size, line height, font color, background color are selected for this experiment. The range of line width is 800-1000px. The
+                    range of title font size is 12-45px while the range of content font size id 12-30px. The range of line height is 1-2. This value is unitless and the actual distance is specified by multiplying this value by the font size of the element itself
+                    Particularly, both font colour and background color are parameterised using the HSL color system, as
+                    this color system better reflects human perception of color relationships.
+                    The system encodes each color as three integers: hue, saturation and lightness. Hue is a degree on
+                    the color wheel from 0 to 360. 0 is red, 120 is green, 240 is blue.
+                    Saturation can be described as the intensity of a color. 100% is pure color, no shades of gray; 50%
+                    is 50% gray, but you can still see the color; 0% is completely gray, you can no longer see the
+                    color.
+                    The lightness of a color can be described as how much light you want to give the color, where 0%
+                    means no light (black), 50% means 50% light (neither dark nor light) 100% means full lightness
+                    (white).
+                    In total, there are 10 web parameters that need to be manipulated.
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </article>
+
+
+        </div>
+
+        <div class="relative w-100 mb4">
+
+          <article class="bb b--black-10">
+            <div class="db pv4 ph3 ph0-l no-underline dark-gray">
+              <div class="flex flex-column flex-row-ns">
+
+
+
+                <div class="pr3-ns mb4 mb0-ns w-100 w-40-ns">
+                  <a href="/post/chapter-6/" class="db grow">
+                    <img src="/img/control panel.png" class="img">
+                  </a>
+                </div>
+
+                <div class="blah w-100 w-60-ns pl3-ns">
+                  <h1 class="f3 fw1 athelas mt0 lh-title">
+                    <h2 class="color-inherit dim link">
+                      Note III: Manipulating the slider
+                    </h2>
+                  </h1>
+                  <div class="f6 f5-l lh-copy nested-copy-line-height nested-links">
+                    When you enter the experiment screen, you can see a control panel hovering in the middle. Below this is the text to be rendered. As you move the slider, the corresponding changes are displayed on the left-hand side of the content below.
+
+                    What you need to do is, for each web parameter, adjust the slider and choose a value that you think
+                    will maximise the readability of the web page.
+                    Once you have determined your choice for the current parameter value, click on the Save button and
+                    you will be taken to the choice for the next parameter value.
+
+                    To ensure that participants are not experimenting perfunctorily, we detect the event of the user moving
+                    the slider and if no movement event is detected, the web page will pop up with a prompt. This means that 
+                     even if the default random value has met your choice, you still need to move the slider and locate it 
+                     to the position you think is most appropriate, sorry for the inconvenience.
+
+                     To exclude the control panel itself from interfering with the user's evaluation of the readability of 
+                     the web page, the user can drag the control panel to wherever they see fit. And the size of control panel can 
+                     be minimized by clicking on the minimize button in the top left corner, which will appear as an icon in the top right corner 
+                     of the page and can be restored by clicking on the icon.
+
+                    It is important to note that the experiment will run for a total of 20 iterations. An iteration
+                    ends when you have finished selecting the values for each set of 8 parameters.
+                    The number of remaining iterations is displayed on the operation panel for your reference. 
+                    After 20 iterations, when you click the "save" button, your data will be recorded in the database and the experiment is completed.
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+
+        <div class="relative w-100 mb4">
+
+          <article class="bb b--black-10">
+            <div class="db pv4 ph3 ph0-l no-underline dark-gray">
+              <div class="flex flex-column flex-row-ns">
+
+
+
+                <div class="pr3-ns mb4 mb0-ns w-100 w-40-ns">
+                  <a href="/post/chapter-6/" class="db grow">
+                    <img src="/img/important_note.png" class="img" alt="image from Chapter VI: Esmeralda">
+                  </a>
+                </div>
+
+                <div class="blah w-100 w-60-ns pl3-ns">
+                  <h1 class="f3 fw1 athelas mt0 lh-title">
+                    <h2 class="color-inherit dim link">
+                      Note IV: Important special notes
+                    </h2>
+                  </h1>
+                  <div class="f6 f5-l lh-copy nested-copy-line-height nested-links">
+                    <ul>
+                      <li> To ensure that the experimental data collected is valid, please read the experimental
+                        requirements carefully</li>
+                      <li>Please don't fabricate data</li>
+                      <li>If you are indecisive about more than one values, go with your gut feeling and choose the one
+                        you feel most comfortable with</li>
+                      <li> Do not refresh the web page during the experiment</li>
+                      <li> Do not click the back button during the experiment</li>
+                      <li> Do not change the url in the address bar during the experiment</li>
+                      <li> Please do not quit in the middle of the experiment</li>
+                    </ul>
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </article>
+
+
+        </div>
+
+      </section>
+
+     
+      </section>
+    </div>
+
+    <div class="bottom">
+      <input id="box" type="checkbox" /> <span id="contract"></span>
+    </div>
+    <button id="button" disabled="true" style="cursor:not-allowed">Next</button>
+  </main>
+
+
+  <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+    <div class="flex justify-between">
+      <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="">
+        &copy; Gibbs Sampling with People
+      </a>
+
+    </div>
+  </footer>
+
+</body>
+
+</html>
